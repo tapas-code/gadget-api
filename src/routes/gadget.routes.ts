@@ -9,11 +9,12 @@ import {
   requestSelfDestructCode,
   confirmSelfDestruct,
 } from "../controllers/selfDestruct.controller";
+import { authenticateUser } from "../middlewares/authMiddleware";
 
 const router: Router = express.Router();
 
-router.get("/", getAllGadgets);
-router.get("/", createGadget);
+router.get("/", authenticateUser, getAllGadgets);
+router.get("/",authenticateUser, createGadget);
 router.get("/:id", updateGadget);
 router.get("/:id", deleteGadget);
 
