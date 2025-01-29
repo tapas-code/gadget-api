@@ -24,7 +24,10 @@ export const getAllGadgets = async (req: Request, res: Response) => {
 };
 
 // ✅ POST: Add a new gadget
-export const createGadget = async (req: Request, res: Response): Promise<any> => {
+export const createGadget = async (
+  req: Request,
+  res: Response
+): Promise<any> => {
   try {
     const { name } = req.body;
 
