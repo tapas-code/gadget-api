@@ -25,11 +25,14 @@ export const requestSelfDestructCode = async (
 
     // Store in Redis with an expiry time (5 minutes)
     await redis.set(
-      `self-destruct: ${id}`,
+      `self-destruct:${id}`,
       confirmationCode.toString(),
       "EX",
       SELF_DESTRUCT_EXPIRY
     );
+
+    const storedCode = await redis.get(`self-destruct:${id}`);
+    console.log(`Stored Code in Redis: ${storedCode}`); // ✅ Debug Log
 
     res.json({
       message: "Self-destruct confirmation code generated.",
@@ -42,7 +45,10 @@ export const requestSelfDestructCode = async (
 };
 
 // ✅ Step 2: Confirm the self-destruct code and destroy the gadget
-export const confirmSelfDestruct = async (req: Request, res: Response): Promise<any> => {
+export const confirmSelfDestruct = async (
+  req: Request,
+  res: Response
+): Promise<any> => {
   try {
     const { id } = req.params;
     const { confirmationCode } = req.body;
