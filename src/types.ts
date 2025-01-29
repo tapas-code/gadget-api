@@ -1,3 +1,5 @@
+import { Request } from "express";
+
 export type GadgetStatus =
   | "Available"
   | "Deployed"
@@ -15,4 +17,10 @@ export interface Gadget {
 
 export interface GadgetResponse extends Gadget {
   missionSuccessProbability?: string;
+}
+
+export interface AuthRequest extends Request {
+  user?: {
+    id: string;
+  };
 }
