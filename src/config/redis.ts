@@ -3,11 +3,9 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const REDIS_URL="rediss://red-cudkom56l47c73af58sg:IXCK0BmSu7VvBJmY19T7tshidXTKclTt@oregon-redis.render.com:6379"
+console.log("🚀 Redis URL:", process.env.REDIS_URL);
 
-console.log("🚀 Redis URL:", REDIS_URL);
-
-const redis = new Redis(REDIS_URL, {
+const redis = new Redis(process.env.REDIS_URL as string, {
   tls: {
     rejectUnauthorized: false, 
   },
