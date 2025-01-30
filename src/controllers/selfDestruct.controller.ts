@@ -40,7 +40,7 @@ export const requestSelfDestructCode = async (
       expiresIn: SELF_DESTRUCT_EXPIRY,
     });
   } catch (error) {
-    res.status(500).json({ error: "Failed to generate self-destruct code" });
+    res.status(500).json({ message: "Failed to generate self-destruct code", error });
   }
 };
 
