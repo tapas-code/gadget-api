@@ -26,7 +26,7 @@ export const registerUser = async (req: Request, res: Response): Promise<any> =>
 
     res.status(201).json({ message: "User registered successfully" });
   } catch (error) {
-    res.status(500).json({ error: "Registration failed" });
+    res.status(500).json({ message: "User Registration Failed", error });
   }
 };
 
@@ -51,6 +51,6 @@ export const loginUser = async (req: Request, res: Response): Promise<any> => {
     const token = generateToken(user.id);
     res.json({ token });
   } catch (error) {
-    res.status(500).json({ error: "Login failed" });
+    res.status(500).json({ message: "Login failed", error });
   }
 };
