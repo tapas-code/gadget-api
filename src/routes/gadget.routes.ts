@@ -2,7 +2,7 @@ import express, { Router } from "express";
 import {
   createGadget,
   deleteGadget,
-  getAllGadgets,
+  getGadgets,
   updateGadget,
 } from "../controllers/gadget.controller";
 import {
@@ -13,7 +13,6 @@ import { authenticateUser } from "../middlewares/authMiddleware";
 
 const router: Router = express.Router();
 
-router.get("/", authenticateUser, getAllGadgets);
 router.post("/",authenticateUser, createGadget);
 router.patch("/:id", authenticateUser, updateGadget);
 router.delete("/:id", authenticateUser, deleteGadget);
@@ -23,5 +22,8 @@ router.post("/:id/self-destruct/request", authenticateUser, requestSelfDestructC
 
 // ✅ Step 2: Confirm the code and self-destruct
 router.post("/:id/self-destruct/confirm", authenticateUser, confirmSelfDestruct);
+
+// ✅ GET /gadgets?status={status}
+router.get("/",authenticateUser, getGadgets);
 
 export default router;
