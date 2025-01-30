@@ -22,13 +22,13 @@ export const requestSelfDestructCode = async (
 
     const confirmationCode = Math.floor(100000 + Math.random() * 900000);
 
-    // Store in Redis with an expiry time (5 minutes)
-    await redisClient.set(`self-destruct:${id}`, confirmationCode.toString(), {
-      EX: SELF_DESTRUCT_EXPIRY,
-    });
-
-    const storedCode = await redisClient.get(`self-destruct:${id}`);
-    console.log(`Stored Code in Redis: ${storedCode}`); // ✅ Debug Log
+    const redisKey = `self-destruct:${id}`;
+    console.log(`🔑 Storing Code in Redis at Key: ${redisKey}`);
+    
+    await redisClient.set(redisKey, confirmationCode.toString(), { EX: SELF_DESTRUCT_EXPIRY });
+    
+    const storedCode = await redisClient.get(redisKey);
+    console.log(`🗄️ Retrieved Code from Redis: ${storedCode}`);
 
     res.json({
       message: "Self-destruct confirmation code generated.",
@@ -53,8 +53,11 @@ export const confirmSelfDestruct = async (
       return res.status(400).json({ error: "Confirmation code is required" });
     }
 
-    // Retrieve the stored confirmation code from Redis
-    const storedCode = await redisClient.get(`self-destruct:${id}`);
+    const redisKey = `self-destruct:${id}`;
+    console.log(`🔑 Fetching Code from Redis at Key: ${redisKey}`);
+    
+    const storedCode = await redisClient.get(redisKey);
+    console.log(`🗄️ Stored Code: ${storedCode}, Received Code: ${confirmationCode}`);
 
     if (!storedCode) {
       return res
