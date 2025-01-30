@@ -1,9 +1,8 @@
 import { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
-import Redis from "ioredis";
+import redisClient from "../config/redis";
 
 const prisma = new PrismaClient();
-const redis = new Redis();
 
 const SELF_DESTRUCT_EXPIRY = 300; // Code expires in 5 minutes
 
@@ -24,14 +23,11 @@ export const requestSelfDestructCode = async (
     const confirmationCode = Math.floor(100000 + Math.random() * 900000);
 
     // Store in Redis with an expiry time (5 minutes)
-    await redis.set(
-      `self-destruct:${id}`,
-      confirmationCode.toString(),
-      "EX",
-      SELF_DESTRUCT_EXPIRY
-    );
+    await redisClient.set(`self-destruct:${id}`, confirmationCode.toString(), {
+      EX: SELF_DESTRUCT_EXPIRY,
+    });
 
-    const storedCode = await redis.get(`self-destruct:${id}`);
+    const storedCode = await redisClient.get(`self-destruct:${id}`);
     console.log(`Stored Code in Redis: ${storedCode}`); // ✅ Debug Log
 
     res.json({
@@ -58,7 +54,7 @@ export const confirmSelfDestruct = async (
     }
 
     // Retrieve the stored confirmation code from Redis
-    const storedCode = await redis.get(`self-destruct:${id}`);
+    const storedCode = await redisClient.get(`self-destruct:${id}`);
 
     if (!storedCode) {
       return res
@@ -77,7 +73,7 @@ export const confirmSelfDestruct = async (
     });
 
     // Remove the confirmation code from Redis (no longer needed)
-    await redis.del(`self-destruct:${id}`);
+    await redisClient.del(`self-destruct:${id}`);
 
     res.json({
       message: "Self-destruct sequence confirmed! Gadget destroyed.",

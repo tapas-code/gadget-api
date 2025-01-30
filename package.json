@@ -12,6 +12,7 @@
     "ioredis": "^5.4.2",
     "jsonwebtoken": "^9.0.2",
     "prisma": "^6.2.1",
+    "redis": "^4.7.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
   },

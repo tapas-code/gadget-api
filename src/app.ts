@@ -3,15 +3,19 @@ import cors from "cors";
 import helmet from "helmet";
 import authRoutes from "./routes/auth.routes";
 import gadgetRoutes from "./routes/gadget.routes";
+import { connectRedis } from "./config/redis";
 
 const app = express();
 
-//Middlewares
-app.use(express.json());
-app.use(cors());
-app.use(helmet());
+(async () => {
+  await connectRedis();
+  //Middlewares
+  app.use(express.json());
+  app.use(cors());
+  app.use(helmet());
 
-app.use("/api/auth", authRoutes);
-app.use("/api/gadgets", gadgetRoutes);
+  app.use("/api/auth", authRoutes);
+  app.use("/api/gadgets", gadgetRoutes);
+})();
 
 export default app;
